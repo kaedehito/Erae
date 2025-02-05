@@ -39,11 +39,13 @@ pub fn handle_key_event(
         }
         KeyCode::Char('b') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             cursor.x = cursor.x.saturating_sub(1);
+            return Ok(());
         }
         KeyCode::Char('f') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             if cursor.x < buffer[cursor.y].len() {
                 cursor.x += 1;
             }
+            return Ok(());
         }
         KeyCode::Char('n') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             if cursor.y < buffer.len() - 1 {
@@ -51,6 +53,7 @@ pub fn handle_key_event(
                 update_scroll(&mut cursor.y, screen_height, scroll_offset);
                 cursor.x = cursor.x.min(buffer[cursor.y].len());
             }
+            return Ok(());
         }
 
         KeyCode::Char('p') if key.modifiers.contains(KeyModifiers::CONTROL) => {
@@ -59,15 +62,19 @@ pub fn handle_key_event(
                 update_scroll(&mut cursor.y, screen_height, scroll_offset);
                 cursor.x = cursor.x.min(buffer[cursor.y].len());
             }
+            return Ok(());
         }
 
         KeyCode::Char('o') if key.modifiers.contains(KeyModifiers::CONTROL) => {
+            *saved = false;
             buffer.insert(cursor.y + 1, "".to_string());
             cursor.y += 1;
             cursor.x = 0;
+            return Ok(());
         }
         KeyCode::Char('d') if key.modifiers.contains(KeyModifiers::CONTROL) => {
-            if cursor.x == 0 && buffer[cursor.y].len() == 0{
+            *saved = false;
+            if cursor.x == 0 && buffer[cursor.y].len() == 0 {
                 // **行削除処理**
                 buffer.remove(cursor.y);
                 if cursor.y > 0 {
@@ -80,14 +87,17 @@ pub fn handle_key_event(
                     buffer[cursor.y].remove(cursor.x);
                 }
             }
+            return Ok(());
         }
         KeyCode::Char('s') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             save_file(real_name, buffer, message);
             *saved = true;
+            return Ok(());
         }
         KeyCode::Char(p) if key.modifiers.contains(KeyModifiers::CONTROL) => {
             message.text = format!(" C-{p}: Not a Command ").light_red().to_string();
             message.displayed = true;
+            return Ok(());
         }
         KeyCode::Char(c) => {
             buffer[cursor.y].insert(cursor.x, c);

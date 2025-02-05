@@ -5,7 +5,6 @@ use syntect::highlighting::{self, ThemeSet};
 use syntect::parsing::SyntaxSet;
 use syntect::util::{as_24_bit_terminal_escaped, LinesWithEndings};
 
-
 pub fn set_syntax_higlight(enable: bool) {}
 
 pub fn syntax_return(content: &str, extension: &str) -> String {

@@ -34,7 +34,7 @@ pub fn run(content: String, file_name: &str, real_name: &str) -> io::Result<()> 
     let mut message = Message::default();
     let mut y_or_n_state = YOrNState::default();
     let mut scroll_offset = 0usize;
-    let mut saved = false;
+    let mut saved = true;
 
     while !should_exit {
         message.count += 1;
@@ -48,14 +48,14 @@ pub fn run(content: String, file_name: &str, real_name: &str) -> io::Result<()> 
             scroll_offset,
         )?;
 
-        if y_or_n_state.is_active {
-            handle_y_or_n_event(
-                &mut should_exit,
-                &mut y_or_n_state,
-                &buffer.join("\n"),
-                real_name,
-            )?;
-            continue;
+        if y_or_n_state.is_active && !saved {
+                handle_y_or_n_event(
+                    &mut should_exit,
+                    &mut y_or_n_state,
+                    &buffer.join("\n"),
+                    real_name,
+                )?;
+                continue;
         }
 
         clear_message_after_timeout(&mut message);
