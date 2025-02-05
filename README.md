@@ -31,7 +31,7 @@ cargo install --path .
 
 ## Usage
 ```sh
-Erae <filename>
+erae <filename>
 ```
 
 ## License

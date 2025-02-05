@@ -27,7 +27,7 @@ pub fn handle_key_event(
     match key.code {
         KeyCode::Char('q') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             let old = buffer.join("\n");
-            if content != old && !*saved {
+            if content != old {
                 y_or_n_state.is_active = true;
                 y_or_n_state.prompt = format!(
                     "The file {} is not saved! Do you really want to exit?",
